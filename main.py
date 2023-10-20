@@ -27,7 +27,15 @@ client.remove_command('help')
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send('You can place a pixel in {:.2f} seconds.'.format(error.retry_after))
+
+
 @client.command()
+@commands.cooldown(1, 120, commands.BucketType.user)
 async def place(ctx, x, y, r, g, b):
   x = int(x)
   y = int(y)
